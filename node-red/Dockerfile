@@ -12,15 +12,14 @@ WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
-RUN apk add --no-cache --virtual .build-dependencies \
-        g++ \
-        gcc \
-        libc-dev \
-        linux-headers \
-        make \
-        py3-pip \
-        python3-dev \
-        python3
+RUN apk add --no-cache g++
+RUN apk add --no-cache gcc
+RUN apk add --no-cache libc-dev
+RUN apk add --no-cache linux-headers
+RUN apk add --no-cache make
+RUN apk add --no-cache py3-pip
+RUN apk add --no-cache python3-dev
+RUN apk add --no-cache python3
 RUN apk add --no-cache \
         git=2.36.3-r0 \
         icu-data-full=71.1-r2 \
@@ -39,7 +38,7 @@ RUN npm install \
 RUN npm rebuild --build-from-source @serialport/bindings-cpp
 RUN npm cache clear --force
 RUN echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-RUN apk del --no-cache --purge .build-dependencies
+#RUN apk del --no-cache --purge .build-dependencies
 RUN rm -fr \
         /etc/nginx \
         /root/.cache \
