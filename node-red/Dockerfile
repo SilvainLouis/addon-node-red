@@ -11,40 +11,6 @@ WORKDIR /opt
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Setup base
-RUN apk add --no-cache g++
-RUN apk add --no-cache gcc
-RUN apk add --no-cache libc-dev
-RUN apk add --no-cache linux-headers
-RUN apk add --no-cache make
-RUN apk add --no-cache py3-pip
-RUN apk add --no-cache python3-dev
-RUN apk add --no-cache python3
-RUN apk add --no-cache \
-        git=2.36.3-r0 \
-        icu-data-full=71.1-r2 \
-        nginx=1.22.1-r0 \
-        nodejs=16.17.1-r0 \
-        npm=8.10.0-r0 \
-        openssh-client=9.0_p1-r2 \
-        patch=2.7.6-r7
-RUN npm config set unsafe-perm true
-RUN npm install \
-        --no-audit \
-        --no-optional \
-        --no-update-notifier \
-        --only=production \
-        --unsafe-perm
-RUN npm rebuild --build-from-source @serialport/bindings-cpp
-RUN npm cache clear --force
-RUN echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-#RUN apk del --no-cache --purge .build-dependencies
-RUN rm -fr \
-        /etc/nginx \
-        /root/.cache \
-        /root/.npm \
-        /root/.nrpmrc \
-        /tmp/*
 
 # Copy root filesystem
 COPY rootfs /
