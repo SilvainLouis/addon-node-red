@@ -12,8 +12,7 @@ WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Setup base
-RUN \
-    apk add --no-cache --virtual .build-dependencies \
+RUN apk add --no-cache --virtual .build-dependencies \
         g++=11.2.1_git20220219-r2 \
         gcc=11.2.1_git20220219-r2 \
         libc-dev=0.7.2-r3 \
@@ -21,33 +20,27 @@ RUN \
         make=4.3-r0 \
         py3-pip=22.1.1-r0 \
         python3-dev=3.10.5-r0 \
-        python3=3.10.5-r0 \
-    \
-    && apk add --no-cache \
+        python3=3.10.5-r0
+RUN apk add --no-cache \
         git=2.36.3-r0 \
         icu-data-full=71.1-r2 \
         nginx=1.22.1-r0 \
         nodejs=16.17.1-r0 \
         npm=8.10.0-r0 \
         openssh-client=9.0_p1-r2 \
-        patch=2.7.6-r7 \
-    \
-    && npm config set unsafe-perm true \
-    \
-    && npm install \
+        patch=2.7.6-r7
+RUN npm config set unsafe-perm true
+RUN npm install \
         --no-audit \
         --no-optional \
         --no-update-notifier \
         --only=production \
-        --unsafe-perm \
-    && npm rebuild --build-from-source @serialport/bindings-cpp \
-    \
-    && npm cache clear --force \
-    \
-    && echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config \
-    \
-    && apk del --no-cache --purge .build-dependencies \
-    && rm -fr \
+        --unsafe-perm
+RUN npm rebuild --build-from-source @serialport/bindings-cpp
+RUN npm cache clear --force
+RUN echo -e "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+RUN apk del --no-cache --purge .build-dependencies
+RUN rm -fr \
         /etc/nginx \
         /root/.cache \
         /root/.npm \
